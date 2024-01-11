@@ -1,0 +1,53 @@
+﻿@model IEnumerable<TruckRecords.Models.BuildRecord>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BuildDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Notes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Truck)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Component)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuildDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Notes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Truck.TruckID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Component.ComponentID)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BuildRecordID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BuildRecordID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BuildRecordID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,42 @@
+﻿@model TruckRecords.Models.BuildRecord
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>BuildRecord</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BuildDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BuildDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Truck)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Truck.TruckID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Component)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Component.ComponentID)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.BuildRecordID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
