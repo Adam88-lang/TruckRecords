@@ -27,5 +27,16 @@
         <input type="submit" value="Submit">
     </form>
 
+    @if (ViewBag.ValidationErrors != null)
+    {
+        <ul>
+            @foreach (var error in ViewBag.ValidationErrors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    }
+
+
 </body>
 </html>

@@ -15,18 +15,21 @@ namespace TruckRecords.Controllers
 
         //custom method for adding test data from input form
         [HttpPost]
-        public async Task<IActionResult> SubmitData(TestResult testResults
-            )
+        public async Task<IActionResult> SubmitData(TestResult testResults)
         {
             if (ModelState.IsValid)
             {
                 _context.TestResults.Add(testResults);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("SuccessPage"); // Or any other view you want to redirect to
+                TempData["SuccessMessage"] = "Test Record added successfully";
+                return RedirectToAction(nameof(Create)); // Redirect back to the Create view
             }
 
-            return View("YourFormView", testResults); // Return to the form view if validation fails
+            //view is InputTestData, then testResults is the model you're filling in
+            return View("InputTestData", testResults);
         }
+
+
         // GET: TestDataController
         public ActionResult Index()
         {

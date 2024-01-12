@@ -18,12 +18,7 @@ namespace TruckRecords.Controllers
             _context = context;
         }
 
-        // GET: TestResults
-        public async Task<IActionResult> Index()
-        {
-            var tRDbContext = _context.TestResults.Include(t => t.Test).Include(t => t.Truck);
-            return View(await tRDbContext.ToListAsync());
-        }
+
 
         // GET: TestResults/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -34,8 +29,8 @@ namespace TruckRecords.Controllers
             }
 
             var testResult = await _context.TestResults
-                .Include(t => t.Test)
-                .Include(t => t.Truck)
+                
+                
                 .FirstOrDefaultAsync(m => m.TestResultID == id);
             if (testResult == null)
             {
@@ -51,11 +46,22 @@ namespace TruckRecords.Controllers
             {
                 _context.TestResults.Add(testResults);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Home"); // Or any other view you want to redirect to
+                //this is taking you to the specified action 
+                return RedirectToAction("Create");
             }
 
-            return View("~/Views/Home/InputTestData.cshtml", testResults); // Return to the form view if validation fails
+            // If we get here, it means the model was not valid
+            // Extract the validation messages and pass them to the view
+            var errorList = ModelState.Values.SelectMany(m => m.Errors)
+                                             .Select(e => e.ErrorMessage)
+                                             .ToList();
+
+            // Add the errors to the ViewBag or ViewData to access them in the view
+            ViewBag.ValidationErrors = errorList;
+
+            return View("~/Views/Home/InputTestData.cshtml", testResults);
         }
+
 
         // GET: TestResults/Create
         public IActionResult Create()
@@ -71,11 +77,14 @@ namespace TruckRecords.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TestResultID,TruckID,TestID,DateConducted,Result,Comments")] TestResult testResult)
         {
+
+            //if the record is added succesfully, go back to same page and prompt 
             if (ModelState.IsValid)
             {
                 _context.Add(testResult);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["SuccessMessage"] = "Test Record added successfully";
+                return RedirectToAction(nameof(Create));
             }
             ViewData["TestID"] = new SelectList(_context.Tests, "TestID", "TestID", testResult.TestID);
             ViewData["TruckID"] = new SelectList(_context.Trucks, "TruckID", "TruckID", testResult.TruckID);
@@ -145,8 +154,7 @@ namespace TruckRecords.Controllers
             }
 
             var testResult = await _context.TestResults
-                .Include(t => t.Test)
-                .Include(t => t.Truck)
+
                 .FirstOrDefaultAsync(m => m.TestResultID == id);
             if (testResult == null)
             {

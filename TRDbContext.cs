@@ -40,15 +40,8 @@ namespace TruckRecords.Models
                 .WithMany(c => c.BuildRecords)
                 .HasForeignKey(br => br.ComponentID);
 
-            modelBuilder.Entity<TestResult>()
-                .HasOne<Truck>(tr => tr.Truck)
-                .WithMany(t => t.TestResults)
-                .HasForeignKey(tr => tr.TruckID);
 
-            modelBuilder.Entity<TestResult>()
-                .HasOne<Test>(tr => tr.Test)
-                .WithMany(t => t.TestResults)
-                .HasForeignKey(tr => tr.TestID);
+
 
             // Additional configurations can be added here as needed
         }
