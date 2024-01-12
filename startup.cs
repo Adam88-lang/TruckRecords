@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TruckRecords.Models;
 
-
+namespace TruckRecords;
 public class Startup
 {
     public Startup(IConfiguration configuration)

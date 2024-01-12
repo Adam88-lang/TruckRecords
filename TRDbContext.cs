@@ -21,6 +21,14 @@ namespace TruckRecords.Models
         {
             base.OnModelCreating(modelBuilder);
 
+            //making random test result id
+            modelBuilder.Entity<TestResult>()
+            .HasKey(t => t.TestResultID);
+
+            modelBuilder.Entity<TestResult>()
+                .Property(t => t.TestResultID)
+                .ValueGeneratedOnAdd();
+
             // Define foreign key relationships
             modelBuilder.Entity<BuildRecord>()
                 .HasOne<Truck>(br => br.Truck)

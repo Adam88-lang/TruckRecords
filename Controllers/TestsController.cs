@@ -52,11 +52,7 @@ namespace TruckRecords.Controllers
             return View();
         }
 
-        // GET: Test/InputTestData
-        public ActionResult InputTestData()
-        {
-            return View();
-        }
+
 
         // POST: Tests/Create
         //Handles post request when form is submitted

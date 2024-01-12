@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Test Data</title>
+</head>
+<body>
+    <h1>Input Test Data</h1>
+
+    <form method="post" action="/TestResults/SubmitData">
+        <label for="testID">Enter a test ID/select a test ID:</label><br>
+        <input type="text" id="testID" name="TestID"><br>
+        <!-- Dropdown for tests can be populated here -->
+
+        <label for="truckID">Enter a truck ID/select a truck ID:</label><br>
+        <input type="text" id="truckID" name="TruckID"><br>
+        <!-- Dropdown for trucks can be populated here -->
+
+        <label for="dateConducted">Enter date conducted:</label><br>
+        <input type="date" id="dateConducted" name="DateConducted"><br>
+
+        <label for="result">Enter the result:</label><br>
+        <input type="text" id="result" name="Result"><br>
+
+        <label for="comments">Enter comments:</label><br>
+        <input type="text" id="comments" name="Comments"><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>

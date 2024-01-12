@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/TruckRecords.styles.css" asp-append-version="true" />
 </head>
 <body>
+    <!-- Header/ Navbar -->
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -23,18 +24,26 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privaaaacy</a>
+                        </li>
+                        <!-- Quote is what it links to, the last before /a is what it displays -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="InputTestData">Input test data</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
+    <!-- footer  -->
 
     <footer class="border-top footer text-muted">
         <div class="container">

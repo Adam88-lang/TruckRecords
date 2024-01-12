@@ -45,6 +45,18 @@ namespace TruckRecords.Controllers
             return View(testResult);
         }
 
+        public async Task<IActionResult> SubmitData(TestResult testResults)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.TestResults.Add(testResults);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Home"); // Or any other view you want to redirect to
+            }
+
+            return View("~/Views/Home/InputTestData.cshtml", testResults); // Return to the form view if validation fails
+        }
+
         // GET: TestResults/Create
         public IActionResult Create()
         {
@@ -54,8 +66,7 @@ namespace TruckRecords.Controllers
         }
 
         // POST: TestResults/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TestResultID,TruckID,TestID,DateConducted,Result,Comments")] TestResult testResult)
@@ -90,8 +101,7 @@ namespace TruckRecords.Controllers
         }
 
         // POST: TestResults/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("TestResultID,TruckID,TestID,DateConducted,Result,Comments")] TestResult testResult)
