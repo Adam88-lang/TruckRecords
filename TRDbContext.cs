@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using TruckRecords.Models;
 
 namespace TruckRecords.Models
@@ -17,6 +18,7 @@ namespace TruckRecords.Models
         public DbSet<TestResult> TestResults { get; set; }
 
         // Override the OnModelCreating method to use the Fluent API for further configuration
+        //Also ignoring select list item so it can make controller
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -40,10 +42,12 @@ namespace TruckRecords.Models
                 .WithMany(c => c.BuildRecords)
                 .HasForeignKey(br => br.ComponentID);
 
-
-
+            modelBuilder.Ignore<SelectListItem>();
 
             // Additional configurations can be added here as needed
         }
+        public DbSet<TruckRecords.Models.TruckTest> TruckTest { get; set; } = default!;
+
+
     }
 }
