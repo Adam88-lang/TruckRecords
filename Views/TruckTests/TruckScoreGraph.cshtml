@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "TruckScoreGraph";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>TruckScoreGraph</h1>
+
+@if (ViewBag.TruckScores != null)
+{
+    foreach (var truck in ViewBag.TruckScores)
+    {
+        <canvas id="@truck.Id"></canvas>
+    }
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var truckScores = @Html.Raw(ViewBag.TruckScoresJson);
+        console.log(truckScores); // Log the data for debugging
+
+        truckScores.forEach(function (truck) {
+            var ctx = document.getElementById(truck.Id).getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: truck.Tests.map(t => t.TestDate), // Use the formatted date string directly
+                    datasets: [{
+                        label: truck.TruckName,
+                        data: truck.Tests.map(t => t.Score)
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        xAxes: [{
+                            // Temporarily simplify the x-axis configuration
+                            type: 'category'
+                        }]
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
+<script type="text/javascript">
+    function groupBy(array, keyFunc) {
+        var result = {};
+        array.forEach(function (item) {
+            var key = keyFunc(item);
+            if (!result[key]) {
+                result[key] = [];
+            }
+            result[key].push(item);
+        });
+        return result;
+    }
+</script>

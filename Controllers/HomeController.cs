@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TruckRecords.Models;
+using TestResult = TruckRecords.Models.TestResult;
+
 
 namespace TruckRecords.Controllers
 {

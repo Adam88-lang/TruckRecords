@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecords.Models;
+using TestResult = TruckRecords.Models.TestResult;
+
 
 namespace TruckRecords.Controllers
 {

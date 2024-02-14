@@ -20,3 +20,8 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* spacing for above the create buytton */
+.button-spacing {
+    margin-top: 10px;
+}

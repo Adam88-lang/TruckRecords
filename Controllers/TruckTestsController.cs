@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TruckRecords.Models;
+using Newtonsoft.Json;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using TestResult = TruckRecords.Models.TestResult;
+
 
 namespace TruckRecords.Controllers
 {
@@ -17,6 +21,37 @@ namespace TruckRecords.Controllers
         {
             _context = context;
         }
+
+        public ActionResult TruckScoreGraph()
+        {
+
+            //making a list out of the truckTest table
+            var truckTests = _context.TruckTests.ToList();
+
+            var truckScores = truckTests
+                //groupe by truck name
+                .GroupBy(t => t.TruckName)
+
+                //each group has a truck name, a test, and an id
+                .Select((group, index) => new
+                {
+                    TruckName = group.Key,
+                    Tests = group.OrderBy(t => t.TestDate)
+                    .Select(t => new
+                    {
+                        TestDate = t.TestDate.ToString("yyyy-MM-dd"),
+                        t.Score
+                    }).ToList(),
+                    Id = "truck_" + index // Generate a unique ID for each group
+                }).ToList();
+
+            //making a json object out of the truckScores list for javascript
+            ViewBag.TruckScoresJson = Newtonsoft.Json.JsonConvert.SerializeObject(truckScores);
+            ViewBag.TruckScores = truckScores;
+            //returns default view
+            return View();
+        }
+
 
         // GET: TruckTests
         public async Task<IActionResult> Index()
@@ -41,6 +76,51 @@ namespace TruckRecords.Controllers
 
             return View(truckTest);
         }
+       
+
+
+        [HttpGet]
+        public JsonResult GetTestTypesByComponent(string component)
+        {
+            // Retrieve test types based on the selected component
+            
+            var testTypes = new List<SelectListItem>();
+
+            if (component == "Engine")
+            {
+                testTypes.Add(new SelectListItem { Value = "Dynamometer Test", Text = "Dynamometer Test" });
+                testTypes.Add(new SelectListItem { Value = "Durability Test", Text = "Durability Test" });
+                testTypes.Add(new SelectListItem { Value = "Emissions Test", Text = "Emissions Test" });
+            }
+            else if (component == "Brakes")
+            {
+                testTypes.Add(new SelectListItem { Value = "Brake Fade Test", Text = "Brake Fade Test" });
+                testTypes.Add(new SelectListItem { Value = "Brake Performance Test", Text = "Brake Performance Test" });
+                testTypes.Add(new SelectListItem { Value = "Brake Test", Text = "Brake Test" });
+            }
+            else if (component == "Suspension")
+            {
+                testTypes.Add(new SelectListItem { Value = "Bump Steer Test", Text = "Bump Steer Test" });
+                testTypes.Add(new SelectListItem { Value = "Durability Test", Text = "Durability Test" });
+                testTypes.Add(new SelectListItem { Value = "Ride Quality Test", Text = "Ride Quality Test" });
+            }
+            else if (component == "Electrical System")
+            {
+                testTypes.Add(new SelectListItem { Value = "Battery Test", Text = "Battery Test" });
+                testTypes.Add(new SelectListItem { Value = "Charging System Test", Text = "Charging System Test" });
+                testTypes.Add(new SelectListItem { Value = "Starter Test", Text = "Starter Test" });
+            }
+            else if (component == "Computer")
+            {
+                testTypes.Add(new SelectListItem { Value = "Diagnostics Check", Text = "Diagnostics Check" });
+                testTypes.Add(new SelectListItem { Value = "Software Validation", Text = "Software Validation" });
+                testTypes.Add(new SelectListItem { Value = "Environmental Stress Testing", Text = "Environmental Stress Testing" });
+            }
+            
+            // Return the test types as a JSON object
+            return Json(testTypes);
+        }
+
 
         private void PopulateTrucksDropDownList(object selectedTruck = null)
         {
@@ -50,31 +130,56 @@ namespace TruckRecords.Controllers
             ViewBag.TrucksList = new SelectList(trucksQuery, "Value", "Text", selectedTruck);
         }
 
+        private void PopulateComponentTestedDropDownList(object selectedComponent = null)
+        {
+            var components = new List<string> { "Engine", "Brakes", "Suspension", "Electrical System", "Computer" };
+
+            ViewBag.ComponentTested = components.Select(x => new SelectListItem
+            {
+                Value = x,
+                Text = x
+            }).ToList();
+        }
 
 
         // GET: TruckTests/Create
         public IActionResult Create()
         {
             PopulateTrucksDropDownList();
+            PopulateComponentTestedDropDownList(); // Add this line
             return View();
         }
 
         // POST: TruckTests/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TruckName,ComponentTested,TestType,TestDate,Score")] TruckTest truckTest)
         {
             if (ModelState.IsValid)
             {
+                // Set time component of TestDate to midnight
+                truckTest.TestDate = truckTest.TestDate.Date;
+
                 _context.Add(truckTest);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                TempData["SuccessMessage"] = "Record Created Successfully";
+                return RedirectToAction(nameof(Create));
             }
+            // Collecting the validation errors
+            var validationErrors = ModelState
+                                   .Where(ms => ms.Value.Errors.Any())
+                                   .SelectMany(ms => ms.Value.Errors)
+                                   .Select(e => e.ErrorMessage)
+                                   .ToList();
+
+            // Passing the errors to the view
+            ViewBag.ValidationErrors = validationErrors;
+            PopulateTrucksDropDownList(truckTest.TruckName);
+            PopulateComponentTestedDropDownList(truckTest.ComponentTested); //this fixed it breaking on submit
             return View(truckTest);
         }
 
+        
         // GET: TruckTests/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -94,8 +199,6 @@ namespace TruckRecords.Controllers
         }
 
         // POST: TruckTests/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("TruckName,ComponentTested,TestType,TestDate,Score")] TruckTest truckTest)
@@ -165,5 +268,7 @@ namespace TruckRecords.Controllers
         {
             return _context.TruckTest.Any(e => e.TruckName == id);
         }
+        
+        
     }
 }

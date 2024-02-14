@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TruckRecords.Models;
+using TestResult = TruckRecords.Models.TestResult;
+
 
 namespace TruckRecords.Controllers
 {

@@ -1,0 +1,52 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Truck Display</title>
+    <style>
+        .truck-container {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .truck {
+            text-align: center;
+            margin: 10px;
+        }
+
+            .truck img {
+                width: 200px; /* Adjust as needed */
+                height: auto;
+            }
+    </style>
+</head>
+<body>
+    <div class="truck-container">
+        <div class="truck">
+            @Html.ActionLink("Peterbilt 389", "TestTypes389", "Graphs", new { }, new { @class = "your-link-class" })
+            <img src="~/images/peterbilt_389.png" alt="Peterbilt 389">
+        </div>
+    </div>
+
+
+    </div>
+
+        <div class="truck">
+            <a href="your-link-here">
+                <img src="~/images/kenworth-t660.png" alt="Kenworth T-660">
+                <p>Kenworth T-660</p>
+            </a>
+        </div>
+        <div class="truck">
+            <a href="your-link-here">
+                <img src="~/images/DAF-LF45.png" alt="DAF-LF45">
+                <p>DAF-LF45</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

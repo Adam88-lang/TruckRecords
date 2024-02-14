@@ -1,0 +1,23 @@
+name: .NET Test and Report
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Run tests
+      run: dotnet test --logger "trx;LogFileName=test_results.trx"
+    - name: List files
+      run: ls -R # This will recursively list all files in all directories
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Results
+        path: ./**/*.trx

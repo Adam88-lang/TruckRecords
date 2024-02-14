@@ -1,50 +1,119 @@
-﻿@model TruckRecords.Models.TruckTest
+﻿<link rel="stylesheet" href="~/css/site.css" />
+
+
+
+@model TruckRecords.Models.TruckTest
 
 @{
     ViewData["Title"] = "Create";
+    var trucksList = ViewBag.TrucksList as IEnumerable<SelectListItem>;
 }
-<h1>Create</h1>
 
-<h4>TruckTest</h4>
+<h1>Input Test Result Data</h1>
+
+<h4>PACCAR North America</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.DropDownList("TruckName", ViewBag.TrucksList as SelectList, "Select a truck", htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.TruckName, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <label asp-for="ComponentTested" class="control-label">Component Tested</label>
-                <input asp-for="ComponentTested" class="form-control" />
-                <span asp-validation-for="ComponentTested" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TestType" class="control-label">Test Type</label>
-                <input asp-for="TestType" class="form-control" />
-                <span asp-validation-for="TestType" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TestDate" class="control-label">Test Date</label>
-                <input asp-for="TestDate" type="date" class="form-control" />
-                <span asp-validation-for="TestDate" class="text-danger"></span>
-            </div>
+        <form asp-action="Create" method="post">
 
+            <!-- Truck name dropdown menu-->
             <div class="form-group">
-                <label asp-for="Score" class="control-label">Score (1-10)</label>
-                <input asp-for="Score" class="form-control" />
-                <span asp-validation-for="Score" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+                <label asp-for="TruckName" class="control-label">Truck Name</label>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.DropDownListFor(model => model.TruckName,
+                         trucksList,
+                         "Select a truck",
+                         new { @class = "form-control" }
+                         )
+                @Html.ValidationMessageFor(model => model.TruckName, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Component Tested Dropdown Menu-->
+                <div class="form-group">
+                    <label asp-for="ComponentTested" class="control-label">Component Tested</label>
+                    @Html.DropDownListFor(model => model.ComponentTested,
+                             ViewBag.ComponentTested as IEnumerable<SelectListItem>,
+                             "Select a component",
+                             new { @class = "form-control" }
+                             )
+                    @Html.ValidationMessageFor(model => model.ComponentTested, "", new { @class = "text-danger" })
+                </div>
+
+                <!-- Test Type Dropdown Menu, with populations based on component selection-->
+                <div class="form-group">
+                    <label asp-for="TestType" class="control-label">Test Type</label>
+                    @Html.DropDownListFor(model => model.TestType,
+                             new SelectList(Enumerable.Empty<string>()),
+                             "Select a test type",
+                             new { @class = "form-control", id = "testTypeDropdown" })
+                    @Html.ValidationMessageFor(model => model.TestType, "", new { @class = "text-danger" })
+                </div>
+
+                <!--Test Date Input-->
+                <div class="form-group">
+                    <label asp-for="TestDate" class="control-label">Test Date</label>
+                    <input asp-for="TestDate" type="date" class="form-control" />
+                    <span asp-validation-for="TestDate" class="text-danger"></span>
+                </div>
+
+                <!-- Score Input-->
+                <div class="form-group">
+                    <label asp-for="Score" class="control-label">Score (1-10)</label>
+                    <input asp-for="Score" class="form-control" />
+                    <span asp-validation-for="Score" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <!-- create button with css spacing-->
+                    <input type="submit" value="Create" class="btn btn-primary button-spacing" />
+                </div>
         </form>
+
+
     </div>
 </div>
+
+<div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+</div>
+
+@if (ViewBag.ValidationErrors != null)
+{
+    <ul>
+        @foreach (var error in ViewBag.ValidationErrors)
+        {
+            <li>@error</li>
+        }
+    </ul>
+}
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('#ComponentTested').change(function () {
+                var selectedComponent = $(this).val();
+                $.getJSON('@Url.Action("GetTestTypesByComponent", "TruckTests")', { component: selectedComponent }, function (testTypes) {
+                    var testTypeDropdown = $('#testTypeDropdown');
+                    testTypeDropdown.empty();
+                    $.each(testTypes, function (index, item) {
+                        testTypeDropdown.append($('<option></option>').val(item.value).text(item.text));
+                    });
+                });
+            });
+        });
+    </script>
+
 }

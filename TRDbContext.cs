@@ -10,12 +10,13 @@ namespace TruckRecords.Models
             : base(options)
         {
         }
-
         public DbSet<Truck> Trucks { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<Test> Tests { get; set; }
         public DbSet<BuildRecord> BuildRecords { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<TruckTest> TruckTests { get; set; }
+
 
         // Override the OnModelCreating method to use the Fluent API for further configuration
         //Also ignoring select list item so it can make controller
@@ -47,7 +48,5 @@ namespace TruckRecords.Models
             // Additional configurations can be added here as needed
         }
         public DbSet<TruckRecords.Models.TruckTest> TruckTest { get; set; } = default!;
-
-
     }
 }

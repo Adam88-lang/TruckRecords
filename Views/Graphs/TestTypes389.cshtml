@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "TestTypes389";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pick Test</title>
+</head>
+<body>
+    <h1>PICK TEST</h1>
+    <h2>Engine Tests</h2>
+    <ul>
+        @Html.ActionLink("Dynamometer Test", "Dynamometer389", "Graphs", new { }, new { @class = "your-link-class" })
+        @Html.ActionLink("Durability Test", "Durability389", "Graphs", new { }, new { @class = "your-link-class" })
+        @Html.ActionLink("Emissions Test", "Emissions389", "Graphs", new { }, new { @class = "your-link-class" })
+       
+    </ul>
+    <h2>Brake Tests</h2>
+    <ul>
+        <li><a href="#">Brake Fade Test</a></li>
+        <li><a href="#">Brake Performance Test</a></li>
+        <li><a href="#">Brake Test</a></li>
+    </ul>
+    <h2>Suspension Tests</h2>
+    <ul>
+        <li><a href="#">Bump Steer Test</a></li>
+        <li><a href="#">Durability Test</a></li>
+        <li><a href="#">Ride Quality Test</a></li>
+    </ul>
+    <h2>Electrical System Tests</h2>
+    <ul>
+        <li><a href="#">Battery Test</a></li>
+        <li><a href="#">Charging System Test</a></li>
+        <li><a href="#">Starter Test</a></li>
+    </ul>
+    <h2>Computer Tests</h2>
+    <ul>
+        <li><a href="#">Diagnostics Check</a></li>
+        <li><a href="#">Software Validation</a></li>
+        <li><a href="#">Environmental Stress Testing</a></li>
+    </ul>
+</body>
+</html>
+
+

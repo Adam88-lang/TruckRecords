@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "TestTypesLF45";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pick Test</title>
+</head>
+<body>
+    <h2>Choose Your Test</h2>
+
+    <h4>Engine Tests</h4>
+    <ul>
+        <li>
+            @Html.ActionLink("Dynamometer Test", "Dynamometer389", "Graphs")
+        </li>
+        <li>
+            @Html.ActionLink("Durability Test", "Durability389", "Graphs")
+        </li>
+        <li>
+            @Html.ActionLink("Emissions Test", "Emissions389", "Graphs")
+        </li>
+    </ul>
+
+    <h4>Brake Tests</h4>
+    <ul>
+        <li><a href="#">Brake Fade Test</a></li>
+        <li><a href="#">Brake Performance Test</a></li>
+        <li><a href="#">Brake Test</a></li>
+    </ul>
+    <h2>Suspension Tests</h2>
+    <ul>
+        <li><a href="#">Bump Steer Test</a></li>
+        <li><a href="#">Durability Test</a></li>
+        <li><a href="#">Ride Quality Test</a></li>
+    </ul>
+    <h4>Electrical System Tests</h4>
+    <ul>
+        <li><a href="#">Battery Test</a></li>
+        <li><a href="#">Charging System Test</a></li>
+        <li><a href="#">Starter Test</a></li>
+    </ul>
+    <h4>Computer Tests</h4>
+    <ul>
+        <li><a href="#">Diagnostics Check</a></li>
+        <li><a href="#">Software Validation</a></li>
+        <li><a href="#">Environmental Stress Testing</a></li>
+    </ul>
+</body>
+</html>
+
+
